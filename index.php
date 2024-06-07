@@ -2,13 +2,16 @@
 <html lang="en">
 <?php session_start() ?>
 <?php 
-  if(!isset($_SESSION['login_id']))
-  header('location:login.php');
+	if(!isset($_SESSION['login_id']))
+	    header('location:login.php');
+
+
 	include 'header.php' 
 ?>
-<body class="hold-transition layout-fixed layout-navbar-fixed layout-footer-fixed sidebar-collapse">
+<body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
 <div class="wrapper">
   <?php include 'topbar.php' ?>
+  <?php include 'sidebar.php' ?>
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -18,15 +21,30 @@
 	  </div>
     <div id="toastsContainerTopRight" class="toasts-top-right fixed"></div>
     <!-- Content Header (Page header) -->
-   
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0"><?php echo $title ?></h1>
+          </div><!-- /.col -->
+
+        </div><!-- /.row -->
+            <hr class="border-primary">
+      </div><!-- /.container-fluid -->
+    </div>
     <!-- /.content-header -->
 
     <!-- Main content -->
     <section class="content">
-      <div class="container-md">
+      <div class="container-fluid">
          <?php 
-          $page = isset($_GET['page']) ? $_GET['page'] : 'home';
-          include $page.'.php';
+            $page = isset($_GET['page']) ? $_GET['page'] : 'home';
+            if(!file_exists($page.".php")){
+                include '404.html';
+            }else{
+            include $page.'.php';
+
+            }
           ?>
       </div><!--/. container-fluid -->
     </section>

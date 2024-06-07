@@ -1,66 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
-<?php include 'header.php' ?>
-<body class="hold-transition login-page">
-<div class="login-box">
-  <div class="login-logo">
-    <a href="#"><b>Event Registration and Attendance System</b></a>
-  </div>
-  <!-- /.login-logo -->
-  <div class="card">
-    <div class="card-body login-card-body">
-      <form action="" id="login-form">
-        <div class="input-group mb-3">
-          <input type="email" class="form-control" name="email" required placeholder="Email">
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-envelope"></span>
-            </div>
-          </div>
-        </div>
-        <div class="input-group mb-3">
-          <input type="password" class="form-control" name="password" required placeholder="Password">
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-lock"></span>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-8">
-            <div class="icheck-primary">
-              <input type="checkbox" id="remember">
-              <label for="remember">
-                Remember Me
-              </label>
-            </div>
-          </div>
-          <!-- /.col -->
-          <div class="col-4">
-            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
-          </div>
-          <!-- /.col -->
-        </div>
-      </form>
-    </div>
-    <!-- /.login-card-body -->
-  </div>
-</div>
-<!-- /.login-box -->
+<?php 
+session_start();
+include('./db_connect.php');
+?>
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Login | Event Registration and Attendance System</title>
+ 	
+
+<?php include('./header.php'); ?>
+<?php 
+if(isset($_SESSION['login_id']))
+header("location:index.php?page=home");
+
+?>
+
+</head>
+<style>
+	body{
+		width: 100%;
+	    height: calc(100%);
+	    position: fixed;
+	    top:0;
+	    left: 0
+	    /*background: #007bff;*/
+	}
+	main#main{
+		width:100%;
+		height: calc(100%);
+		display: flex;
+	}
+
+</style>
+
+<body class="bg-dark">
+
+
+  <main id="main" >
+  	
+  		<div class="align-self-center w-100">
+		<h4 class="text-white text-center"><b>Event Registration and Attendance System - Admin</b></h4>
+  		<div id="login-center" class="bg-dark row justify-content-center">
+  			<div class="card col-md-4">
+  				<div class="card-body">
+  					<form id="login-form" >
+  						<div class="form-group">
+  							<label for="email" class="control-label text-dark">Email</label>
+  							<input type="text" id="email" name="email" class="form-control form-control-sm">
+  						</div>
+  						<div class="form-group">
+  							<label for="password" class="control-label text-dark">Password</label>
+  							<input type="password" id="password" name="password" class="form-control form-control-sm">
+  						</div>
+  						<center><button class="btn-sm btn-block btn-wave col-md-4 btn-primary">Login</button></center>
+  					</form>
+  				</div>
+  			</div>
+  		</div>
+  		</div>
+  </main>
+
+  <a href="#" class="back-to-top"><i class="icofont-simple-up"></i></a>
+
+
+</body>
 <script>
-	$(document).ready(function(){
-		$('#login-form').submit(function(e){
+	$('#login-form').submit(function(e){
 		e.preventDefault()
-		start_load()
+		$('#login-form button[type="button"]').attr('disabled',true).html('Logging in...');
 		if($(this).find('.alert-danger').length > 0 )
 			$(this).find('.alert-danger').remove();
 		$.ajax({
-			url:'admin/ajax.php?action=login2',
+			url:'ajax.php?action=login',
 			method:'POST',
 			data:$(this).serialize(),
 			error:err=>{
 				console.log(err)
-				end_load();
+		$('#login-form button[type="button"]').removeAttr('disabled').html('Login');
 
 			},
 			success:function(resp){
@@ -68,14 +87,16 @@
 					location.href ='index.php?page=home';
 				}else{
 					$('#login-form').prepend('<div class="alert alert-danger">Username or password is incorrect.</div>')
-					end_load();
+					$('#login-form button[type="button"]').removeAttr('disabled').html('Login');
 				}
 			}
 		})
 	})
-	})
-</script>
-<?php include 'footer.php' ?>
-
-</body>
+	$('.number').on('input keyup keypress',function(){
+        var val = $(this).val()
+        val = val.replace(/[^0-9 \,]/, '');
+        val = val.toLocaleString('en-US')
+        $(this).val(val)
+    })
+</script>	
 </html>
